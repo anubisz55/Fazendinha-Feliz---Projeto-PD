@@ -1,24 +1,54 @@
-import React from 'react'; 
+import React, { useState } from 'react';  
 import { View, Text, ScrollView, Button } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome';  // biblioteca de ícones
 import styles from './styles'; 
 
 export default function Reserva() {
-  const markedDates = {
-    '2024-09-20': { selected: true, marked: true, dotColor: '#4caf50' },
-    '2024-09-21': { selected: true, marked: true, dotColor: '#4caf50' },
-    '2024-09-22': { selected: true, marked: true, dotColor: '#4caf50' },
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [message, setMessage] = useState('');
 
+  const handleDayPress = (day) => {
+    let newSelectedDays = [...selectedDays];
+
+    // Verifica se o dia já foi selecionado
+    if (newSelectedDays.includes(day.dateString)) {
+      // Remove o dia, se já estiver selecionado
+      newSelectedDays = newSelectedDays.filter(selectedDay => selectedDay !== day.dateString);
+    } else {
+      // Adiciona o dia se ainda não estiver selecionado
+      newSelectedDays.push(day.dateString);
+    }
+
+    setSelectedDays(newSelectedDays);
+
+    // Exibe a mensagem com base no número de dias selecionados
+    if (newSelectedDays.length === 4) {
+      setMessage('Pacote de 4 dias selecionados');
+    } else if (newSelectedDays.length === 7) {
+      setMessage('Pacote de 7 dias selecionados');
+    } else {
+      setMessage('');
+    }
   };
+
+  const markedDates = selectedDays.reduce((acc, day) => {
+    acc[day] = { selected: true, marked: true, dotColor: '#4caf50' };
+    return acc;
+  }, {});
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Reservas</Text>
       
+      <Text style={styles.infoText}>
+        Temos pacotes de reservas de 4 dias ou de uma semana. Selecione os 4 ou 7 dias corretamente para validar sua reserva no nosso calendário!
+      </Text>
+
       <View style={styles.calendarContainer}>
         <Calendar
           markedDates={markedDates}
+          onDayPress={handleDayPress}
           theme={{
             backgroundColor: '#ffffff',
             calendarBackground: '#f5f5f5',
@@ -36,9 +66,7 @@ export default function Reserva() {
         />
       </View>
 
-      <Text style={styles.infoText}>
-        Selecione uma data disponível para sua reserva.
-      </Text>
+      {message ? <Text style={styles.infoText}>{message}</Text> : null}
 
       <View style={styles.contactContainer}>
         <Text style={styles.infoText}>Formas de pagamento:</Text>
@@ -80,7 +108,3 @@ export default function Reserva() {
     </ScrollView>
   );
 }
-
-
-
-
