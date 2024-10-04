@@ -47,7 +47,7 @@ export default function Home({ navigation }) {
          <View style={styles.footer}>
       <Text style={styles.footerText}>Endereço: Estrada da Fazenda - Cidade Feliz, Brasil</Text>
       <Text style={styles.footerText}>© 2024 Fazendinha Feliz</Text>
-      <Text style={styles.footerText}>Desenvolvido por NubAri Entertainment</Text>
+      <Text style={styles.footerText}>Desenvolvido por NuGiAri Entertainment</Text>
 
     </View>
 
